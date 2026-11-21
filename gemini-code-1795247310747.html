@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poules — Épée - Dames - M15</title>
+  <style>
+    :root {
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --header: #0f172a;
+      --accent: #059669;
+      --accent-soft: #ecfdf5;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    header {
+      background: var(--header);
+      color: #ffffff;
+      padding: 24px 16px;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .kicker {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #34d399;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .summary-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .toolbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .toolbar-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-filter {
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .btn-filter:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-filter.active {
+      background: var(--header);
+      color: #ffffff;
+      border-color: var(--header);
+    }
+
+    .search-box input {
+      width: 260px;
+      max-width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+    }
+
+    main {
+      padding: 24px 16px 40px;
+    }
+
+    .pools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      gap: 20px;
+    }
+
+    .pool-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+    }
+
+    .pool-header {
+      background: var(--header);
+      color: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pool-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .pool-count {
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+    }
+
+    th {
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      background: #f8fafc;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.highlight {
+      background: var(--accent-soft);
+    }
+
+    .pos {
+      font-weight: 700;
+      color: var(--muted);
+      width: 36px;
+    }
+
+    .seed {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      width: 44px;
+    }
+
+    .nom {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .prenom {
+      color: #334155;
+    }
+
+    .club {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      text-align: right;
+    }
+
+    .empty {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 36px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    footer {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-top">
+      <div>
+        <div class="kicker">Répartition Tour n° 1 • SCO ESCRIME</div>
+        <h1>Épée — Dames — M15</h1>
+      </div>
+      <div class="summary-badge">
+        <strong>3 poules</strong> • <strong>21 tireuses</strong>
+      </div>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <div class="container toolbar-inner">
+      <div class="filters" id="filters">
+        <button class="btn-filter active" data-pool="all">Toutes les poules</button>
+        <button class="btn-filter" data-pool="01">Poule n° 01</button>
+        <button class="btn-filter" data-pool="02">Poule n° 02</button>
+        <button class="btn-filter" data-pool="03">Poule n° 03</button>
+      </div>
+      <div class="search-box">
+        <input id="searchInput" type="text" placeholder="Filtrer nom, prénom ou club..." />
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <div class="pools-grid" id="poolsGrid"></div>
+    </div>
+  </main>
+
+  <footer>
+    Données issues du document EDM15_poules.pdf — BellePoule
+  </footer>
+
+  <script>
+    const POOLS = [
+      {
+        numero: "01",
+        fencers: [
+          { seed: 1, nom: "LIOTHAUD", prenom: "Valentine", club: "ANGERS SCO" },
+          { seed: 2, nom: "VALOIS", prenom: "Isalys", club: "NIORT CE" },
+          { seed: 5, nom: "QUENON", prenom: "Chloé", club: "JA ST MALO" },
+          { seed: 6, nom: "PONIN", prenom: "Noélia", club: "JA ST MALO" },
+          { seed: 7, nom: "LE COURTOIS BÉZIER", prenom: "Victoire", club: "LAVAL CE" },
+          { seed: 8, nom: "BERNARD", prenom: "Cecile", club: "RENNES CSG" },
+          { seed: 12, nom: "SALMON RADENAC", prenom: "Romane", club: "LORIENT SE" }
+        ]
+      },
+      {
+        numero: "02",
+        fencers: [
+          { seed: 11, nom: "GERARD", prenom: "Valentine", club: "ANGERS CSAD" },
+          { seed: 13, nom: "BERNARD", prenom: "Alizee", club: "SABLES OLONN" },
+          { seed: 14, nom: "EON", prenom: "Alwena", club: "JA ST MALO" },
+          { seed: 17, nom: "MOREAU", prenom: "Mélia", club: "NEUVILLE 72" },
+          { seed: 18, nom: "DIAKITE", prenom: "Maryam", club: "NANTES CEN" },
+          { seed: 19, nom: "CHAMAYOU", prenom: "Domitille", club: "AURAY ESC" },
+          { seed: 20, nom: "BOLLENGIER-STRAGIER", prenom: "Elise", club: "NEUVILLE 72" }
+        ]
+      },
+      {
+        numero: "03",
+        fencers: [
+          { seed: 3, nom: "LOUSTAUNAU", prenom: "Raphaëlle", club: "ANGERS SCO" },
+          { seed: 4, nom: "GASTE", prenom: "Clara", club: "ANGERS SCO" },
+          { seed: 9, nom: "POUCH", prenom: "Zoe", club: "QUIMPER EC" },
+          { seed: 10, nom: "ROCHEREAU", prenom: "Inès", club: "NANTES CEN" },
+          { seed: 15, nom: "SAULNIER", prenom: "Emma", club: "NANTES CEN" },
+          { seed: 16, nom: "LOORIUS", prenom: "Yanna", club: "LOUDEAC" },
+          { seed: 21, nom: "FOULON-LIVET", prenom: "Clarisse", club: "LAVAL CE" }
+        ]
+      }
+    ];
+
+    let selectedPool = "all";
+    let query = "";
+
+    const poolsGrid = document.getElementById("poolsGrid");
+    const searchInput = document.getElementById("searchInput");
+    const filterButtons = document.querySelectorAll(".btn-filter");
+
+    function matchesQuery(f, q) {
+      if (!q) return false;
+      return (
+        f.nom.toLowerCase().includes(q) ||
+        f.prenom.toLowerCase().includes(q) ||
+        f.club.toLowerCase().includes(q) ||
+        String(f.seed).includes(q)
+      );
+    }
+
+    function render() {
+      const q = query.trim().toLowerCase();
+
+      const filteredPools = POOLS
+        .filter((p) => selectedPool === "all" || p.numero === selectedPool)
+        .filter((p) => !q || p.fencers.some((f) => matchesQuery(f, q)));
+
+      if (filteredPools.length === 0) {
+        poolsGrid.innerHTML = `<div class="empty">Aucune tireuse ou poule trouvée pour "${query}".</div>`;
+        return;
+      }
+
+      poolsGrid.innerHTML = filteredPools
+        .map((pool) => {
+          const rows = pool.fencers
+            .map((f, index) => {
+              const hit = matchesQuery(f, q);
+              return `
+                <tr class="${hit ? "highlight" : ""}">
+                  <td class="pos">${index + 1}</td>
+                  <td class="seed">#${f.seed}</td>
+                  <td><span class="nom">${f.nom}</span> <span class="prenom">${f.prenom}</span></td>
+                  <td class="club">${f.club}</td>
+                </tr>
+              `;
+            })
+            .join("");
+
+          return `
+            <section class="pool-card">
+              <div class="pool-header">
+                <span class="pool-title">Poule n° ${pool.numero}</span>
+                <span class="pool-count">${pool.fencers.length} tireuses</span>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Pl.</th>
+                    <th>Clt</th>
+                    <th>Tireuse</th>
+                    <th style="text-align:right;">Club</th>
+                  </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+              </table>
+            </section>
+          `;
+        })
+        .join("");
+    }
+
+    filterButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        selectedPool = btn.dataset.pool;
+        render();
+      });
+    });
+
+    searchInput.addEventListener("input", (e) => {
+      query = e.target.value;
+      render();
+    });
+
+    render();
+  </script>
+</body>
+</html>
