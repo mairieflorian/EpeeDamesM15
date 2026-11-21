@@ -156,11 +156,30 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
 
     .pool-title {
       font-size: 16px;
       font-weight: 700;
+    }
+
+    .pool-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .piste-badge {
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(52, 211, 153, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      padding: 3px 10px;
+      border-radius: 999px;
     }
 
     .pool-count {
@@ -255,7 +274,7 @@
         <h1>Épée — Dames — M15</h1>
       </div>
       <div class="summary-badge">
-        <strong>3 poules</strong> • <strong>21 tireuses</strong>
+        <strong>3 poules</strong> • <strong>21 tireuses</strong> • Pistes 2, 4 et 6
       </div>
     </div>
   </header>
@@ -264,9 +283,9 @@
     <div class="container toolbar-inner">
       <div class="filters" id="filters">
         <button class="btn-filter active" data-pool="all">Toutes les poules</button>
-        <button class="btn-filter" data-pool="01">Poule n° 01</button>
-        <button class="btn-filter" data-pool="02">Poule n° 02</button>
-        <button class="btn-filter" data-pool="03">Poule n° 03</button>
+        <button class="btn-filter" data-pool="01">Poule n° 01 (Piste 2)</button>
+        <button class="btn-filter" data-pool="02">Poule n° 02 (Piste 4)</button>
+        <button class="btn-filter" data-pool="03">Poule n° 03 (Piste 6)</button>
       </div>
       <div class="search-box">
         <input id="searchInput" type="text" placeholder="Filtrer nom, prénom ou club..." />
@@ -288,6 +307,7 @@
     const POOLS = [
       {
         numero: "01",
+        piste: "2",
         fencers: [
           { seed: 1, nom: "LIOTHAUD", prenom: "Valentine", club: "ANGERS SCO" },
           { seed: 2, nom: "VALOIS", prenom: "Isalys", club: "NIORT CE" },
@@ -300,6 +320,7 @@
       },
       {
         numero: "02",
+        piste: "4",
         fencers: [
           { seed: 11, nom: "GERARD", prenom: "Valentine", club: "ANGERS CSAD" },
           { seed: 13, nom: "BERNARD", prenom: "Alizee", club: "SABLES OLONN" },
@@ -312,6 +333,7 @@
       },
       {
         numero: "03",
+        piste: "6",
         fencers: [
           { seed: 3, nom: "LOUSTAUNAU", prenom: "Raphaëlle", club: "ANGERS SCO" },
           { seed: 4, nom: "GASTE", prenom: "Clara", club: "ANGERS SCO" },
@@ -373,7 +395,10 @@
             <section class="pool-card">
               <div class="pool-header">
                 <span class="pool-title">Poule n° ${pool.numero}</span>
-                <span class="pool-count">${pool.fencers.length} tireuses</span>
+                <div class="pool-meta">
+                  <span class="piste-badge">Piste ${pool.piste}</span>
+                  <span class="pool-count">${pool.fencers.length} tireuses</span>
+                </div>
               </div>
               <table>
                 <thead>
